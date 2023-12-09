@@ -1,14 +1,15 @@
-'use client';
-import React, { useState } from 'react';
-import OtpInput from 'react-otp-input';
-import { BsInfoCircle } from 'react-icons/bs';
-import { abi } from '../constants/index';
+"use client";
+import React, { useState } from "react";
+import { useStore } from "../store";
+import OtpInput from "react-otp-input";
+import { BsInfoCircle } from "react-icons/bs";
+import { abi } from "../constants/index";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@/components/ui/tooltip';
+} from "@/components/ui/tooltip";
 import {
   Card,
   CardContent,
@@ -16,32 +17,35 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { ethers, Contract } from 'ethers';
+} from "@/components/ui/card";
+import { ethers, Contract } from "ethers";
+import QRCode from "react-qr-code";
 
 export default function App() {
-  const [otp, setOtp] = useState('');
+  const [otp, setOtp] = useState("");
+  const { qr, setQr } = useStore();
+  const { value, setIsPublic } = useStore();
 
   async function addHash(mintedHash: any) {
-    const response = await fetch('http://localhost:3000/api/addTrnxHash', {
-      method: 'POST',
+    const response = await fetch("http://localhost:3000/api/addTrnxHash", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         transactionHash: mintedHash,
       }),
     });
     if (!response.ok) {
-      throw new Error('Failed to insert data');
+      throw new Error("Failed to insert data");
     }
   }
 
   async function getVerified() {
-    const response = await fetch('http://localhost:3000/api/getAdandOtp', {
-      method: 'POST',
+    const response = await fetch("http://localhost:3000/api/getAdandOtp", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         frontEndAadharNumber: 123456789012, // Aadhar number will come from frontend
@@ -49,7 +53,7 @@ export default function App() {
       }),
     });
     if (!response.ok) {
-      throw new Error('Failed to fetch data');
+      throw new Error("Failed to fetch data");
     }
     const result = await response.json();
     callingMint();
@@ -61,7 +65,7 @@ export default function App() {
   // Create wallet instance
   const wallet = new ethers.Wallet(`0x${privateKey}`);
   // Create provider
-  const provider = ethers.getDefaultProvider('https://sepolia-rpc.scroll.io');
+  const provider = ethers.getDefaultProvider("https://sepolia-rpc.scroll.io");
   // Connect signer to provider
   const signer = wallet.connect(provider);
 
@@ -76,9 +80,9 @@ export default function App() {
     await mintTokenIfVerified(
       1,
       1,
-      '0x03C6FcED478cBbC9a4FAB34eF9f40767739D1Ff7', // Account will come from safe API
+      "0x03C6FcED478cBbC9a4FAB34eF9f40767739D1Ff7", // Account will come from safe API
       1,
-      '0x00'
+      "0x00"
     );
     getNameOftoken();
   }
@@ -97,27 +101,28 @@ export default function App() {
       id,
       bytesData
     );
-    console.log('Here........');
+    console.log("Here........");
     console.log(minted.hash);
     addHash(minted.hash);
-    console.log('Token has been minted and added to database !!');
+    console.log("Token has been minted and added to database !!");
+    setQr(minted.hash);
   }
 
-  // async function getTokenCount(address: string) {
-  //   const count = await contract.balanceOf(address, 0);
-  //   console.log(count.toString());
-  // }
+  async function getTokenCount(address: string) {
+    const count = await contract.balanceOf(address, 0);
+    console.log(count.toString());
+  }
 
   /* Above code Is for interacting with contract */
 
   return (
     <>
       <div className="flex flex-col justify-center">
-        {' '}
+        {" "}
         <Card className="w-[550px] rounded-full">
           <CardHeader>
             <div className="flex flex-row justify-between items-center gap-1">
-              {' '}
+              {" "}
               <CardTitle className="text-4xl mb-6">Identity</CardTitle>
               <TooltipProvider>
                 <Tooltip>
@@ -143,28 +148,32 @@ export default function App() {
             <div className="flex flex-col justify-center items-center space-y-3">
               <OtpInput
                 containerStyle={{
-                  width: '80px',
-                  height: '60px',
-                  padding: '200px',
-                  background: 'purple',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  borderRadius: '60px',
+                  width: "80px",
+                  height: "60px",
+                  padding: "200px",
+                  background: "white",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  borderRadius: "60px",
+                  borderColor: "#E299EF",
+                  borderWidth: "4px",
                 }}
                 inputStyle={{
-                  width: '40px',
-                  height: '40px',
-                  border: '3px solid green',
-                  padding: '30px',
+                  width: "40px",
+                  height: "40px",
+                  border: "3px solid #E299EF",
+                  padding: "30px",
                 }}
                 value={otp}
                 onChange={setOtp}
                 numInputs={4}
-                renderSeparator={<span>-</span>}
+                renderSeparator={<span>.</span>}
                 renderInput={(props) => <input {...props} />}
               />
               <p>{otp}</p>
+              <p>{value}</p>
+
               <button
                 className="p-2 text-2xl bg-green-400"
                 onClick={getVerified}
