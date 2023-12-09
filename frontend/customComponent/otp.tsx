@@ -19,9 +19,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ethers, Contract } from "ethers";
-import QRCode from "react-qr-code";
-
-export default function App() {
+import { Button } from "@/components/ui/button";
+interface StepComponentProps {
+  onSubmit: () => void;
+}
+const Otp: React.FC<StepComponentProps> = ({ onSubmit }) => {
   const [otp, setOtp] = useState("");
   const { qr, setQr } = useStore();
   const { value, setIsPublic } = useStore();
@@ -163,7 +165,7 @@ export default function App() {
                   width: "40px",
                   height: "40px",
                   border: "3px solid #E299EF",
-                  padding: "30px",
+                  // padding: "20px",
                 }}
                 value={otp}
                 onChange={setOtp}
@@ -171,19 +173,23 @@ export default function App() {
                 renderSeparator={<span>.</span>}
                 renderInput={(props) => <input {...props} />}
               />
-              <p>{otp}</p>
-              <p>{value}</p>
+
+              {/* <p>{otp}</p>
+              <p>{value}</p> */}
 
               <button
                 className="p-2 text-2xl bg-green-400"
                 onClick={getVerified}
-              >
-                Get Verified
-              </button>
+              ></button>
+              <Button className="w-full mt-10" onClick={onSubmit}>
+                Get OTP
+              </Button>
             </div>
           </CardFooter>
         </Card>
       </div>
     </>
   );
-}
+};
+
+export default Otp;

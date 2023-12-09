@@ -64,12 +64,11 @@ const Aadhar: React.FC<StepComponentProps> = ({ onSubmit }) => {
                 }`'
                   type="number"
                   name="contract"
-                  value={aadharInput}
                   onChange={(e: any) => setIsPublic(e.target.value)}
                   placeholder="e.g. 123456789012"
                 />
               </div>
-              <p>{value}</p>
+              {/* <p>{value}</p> */}
             </div>
           </form>
 
