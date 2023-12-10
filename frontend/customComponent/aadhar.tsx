@@ -1,13 +1,13 @@
-"use client";
-import React, { useState } from "react";
-import { BsInfoCircle } from "react-icons/bs";
-import { Button } from "@/components/ui/button";
+'use client';
+import React, { useState } from 'react';
+import { BsInfoCircle } from 'react-icons/bs';
+import { Button } from '@/components/ui/button';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from '@/components/ui/tooltip';
 import {
   Card,
   CardContent,
@@ -15,10 +15,10 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import Input from "./display";
-import Display from "./display";
-import { useStore } from "../store";
+} from '@/components/ui/card';
+// import Input from "./display";
+// import Display from "./display";
+import { useStore } from '../store';
 
 interface StepComponentProps {
   onSubmit: () => void;
@@ -30,11 +30,11 @@ const Aadhar: React.FC<StepComponentProps> = ({ onSubmit }) => {
 
   return (
     <div className="flex flex-col justify-center">
-      {" "}
+      {' '}
       <Card className="w-[550px]">
         <CardHeader>
           <div className="flex flex-row justify-between items-center gap-1">
-            {" "}
+            {' '}
             <CardTitle>Identity</CardTitle>
             <TooltipProvider>
               <Tooltip>
