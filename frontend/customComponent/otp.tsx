@@ -29,7 +29,7 @@ const Otp: React.FC<StepComponentProps> = ({ onSubmit }) => {
   const { value, setIsPublic } = useStore();
 
   async function addHash(mintedHash: any) {
-    const response = await fetch('http://localhost:3000/api/addTrnxHash', {
+    const response = await fetch('https://sid-ten.vercel.app/api/addTrnxHash', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -44,7 +44,7 @@ const Otp: React.FC<StepComponentProps> = ({ onSubmit }) => {
   }
 
   async function getVerified() {
-    const response = await fetch('http://localhost:3000/api/getAdandOtp', {
+    const response = await fetch('https://sid-ten.vercel.app/api/getAdandOtp', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
